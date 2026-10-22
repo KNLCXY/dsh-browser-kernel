@@ -133,7 +133,7 @@ Long-page budget was chosen from a three-run benchmark (32k-character Python doc
 - **`--no-sandbox` is required** when the kernel lives under a restricted directory (Chromium's sandbox can't read its own executable there).
 - **~16 processes / ~700 MB** while alive; auto-closes after 5 idle minutes, relaunches in 3–6 s.
 - **Separate cookie jar** — it does not reuse your daily Chrome profile; log in once via `action:"login"`.
-- **`navigator.webdriver` is true**, so a few editors (e.g. GitHub's file editor) refuse to render. Workaround: add `--disable-blink-features=AutomationControlled` to the launch flags (not wired into the client yet).
+- **`navigator.webdriver` is now false** (0.9.8 adds `--disable-blink-features=AutomationControlled`), so editors such as GitHub's file editor render normally.
 - Zero runtime dependencies: CDP over Node's built-in `WebSocket`. No Playwright, no Puppeteer.
 
 ## Docs

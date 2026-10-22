@@ -19,10 +19,10 @@ browser_proxy  查看 / 切换 / 探测代理，实时生效，不用重启 DSH
 
 不想 clone 就直接拿打包好的安装包：
 
-**[⬇ dsh-browser-kernel-0.9.7.tgz](https://github.com/KNLCXY/dsh-browser-kernel/releases/latest/download/dsh-browser-kernel-0.9.7.tgz)**（79 KB，含 `lib/`、`docs/`、`locale/`、图标）
+**[⬇ dsh-browser-kernel-0.9.8.tgz](https://github.com/KNLCXY/dsh-browser-kernel/releases/latest/download/dsh-browser-kernel-0.9.8.tgz)**（约 80 KB，含 `lib/`、`docs/`、`locale/`、图标）
 
 ```bash
-dsh plugin --profile <你的 profile> add "file:<下载路径>/dsh-browser-kernel-0.9.7.tgz"
+dsh plugin --profile <你的 profile> add "file:<下载路径>/dsh-browser-kernel-0.9.8.tgz"
 ```
 
 校验（同页附件 `SHA256SUMS.txt`）：
@@ -90,7 +90,7 @@ dsh plugin --profile <你的 profile> add github:KNLCXY/dsh-browser-kernel
 dsh plugin --profile <你的 profile> add "file:/绝对路径/dsh-browser-kernel"
 
 # ③ 从打包好的 tgz 装（离线分发）
-dsh plugin --profile <你的 profile> add "file:/绝对路径/dsh-browser-kernel-0.9.7.tgz"
+dsh plugin --profile <你的 profile> add "file:/绝对路径/dsh-browser-kernel-0.9.8.tgz"
 ```
 
 **装完必须重启 DSH** —— 插件的宿主半和 client 半都在进程启动时组装一次。
@@ -342,7 +342,7 @@ browser_proxy({ action: "stop" })                       // 立刻关掉浏览器
 
 | 限制 | 说明 / 绕法 |
 |---|---|
-| **自动化特征会被站点识别** | `navigator.webdriver === true`。GitHub 的文件编辑器、部分站点的编辑器会因此不渲染。绕法：启动参数加 `--disable-blink-features=AutomationControlled`（还没做进客户端，见 issue） |
+| ~~自动化特征会被站点识别~~ | **0.9.8 已修**：启动参数默认带 `--disable-blink-features=AutomationControlled`，`navigator.webdriver` 不再是 `true`，GitHub 文件编辑器这类页面能正常渲染 |
 | 内核启动 3–6 秒 | 首次调用慢；之后复用同一实例 |
 | 单页正文上限 | `budget_chars` 最大 20000；再大也不会更准（见上面的基准） |
 | 抽取式摘要 | 句子可能不连贯；纯改写式总结需要再过模型 |

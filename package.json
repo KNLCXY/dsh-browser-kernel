@@ -1,6 +1,6 @@
 {
   "name": "dsh-browser-kernel",
-  "version": "0.9.7",
+  "version": "0.9.8",
   "description": "A real browser for DeepSeek Harness: headless Chrome + CDP behind four agent tools (browser / web_find / web_digest / browser_proxy). JS-rendered pages, screenshots, DOM eval, a login flow, auto proxy switching, and an extractive digest pipeline that cuts context tokens by 80-98%.",
   "type": "module",
   "main": "lib/index.js",

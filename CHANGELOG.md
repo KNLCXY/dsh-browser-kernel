@@ -2,6 +2,12 @@
 
 本项目从「工作区脚本」长成「profile 级插件」，版本号按功能块递进。较早的条目按系列合并记录，细节以 `git log` 为准。
 
+## 0.9.8
+
+- 启动参数加 `--disable-blink-features=AutomationControlled`：headless 下
+  `navigator.webdriver === true`，GitHub 的文件编辑器、部分在线编辑器会**整块拒绝渲染**
+  （页面只剩 "Files main" 骨架）。加上这个开关后实测正常，登录态与 cookie 不受影响
+
 ## 0.9.7
 
 - 新增 `lib/rank.js`：`web_find` / `web_digest` 共用搜前清洗与结果重排
