@@ -325,8 +325,8 @@ browser_proxy({ action: "stop" })                       // 立刻关掉浏览器
 | `idleMs` | `300000` | 空闲多久关浏览器（5 分钟） |
 | `usage` | `auto` | 输入框开关：`off` / `auto` / `force` |
 | `sessionUsage` | `{}` | 按会话覆盖 `usage`（键是 sessionId） |
-| `visible` | `false` | 可视模式 |
-| `quiet` | `true` | 可视窗口启动后最小化，不抢焦点；登录时自动还原 |
+| `visible` | `false` | 可视模式：窗口常驻不关；开着时**不会**空闲自动关闭 |
+| `quiet` | `true` | 仅对可视化模式生效：开=开窗最小化、全程不置前（不抢全屏）；关=每次操作置前，实时可见 |
 | `showDock` | `true` | 是否显示输入框旁的小开关 |
 | `budgetChars` | `3000` | 摘要总预算 |
 | `shortMaxChars` / `midMaxChars` / `hugeMaxChars` | `3000` / `15000` / `50000` | 分档阈值 |
