@@ -327,6 +327,8 @@ browser_proxy({ action: "stop" })                       // 立刻关掉浏览器
 | `proxyUrl` | `http://127.0.0.1:7897` | 代理地址 |
 | `proxyMode` | `auto` | `auto` / `always` / `never` |
 | `proxySites` | `github.com, …` | 强制走代理的域名，逗号或换行分隔 |
+| `clashPath` | `''` | Clash Verge 可执行文件；留空 = 自动探测（`DSH_CLASH` 可覆盖） |
+| `autoStartClash` | `true` | 代理端口不通时是否自动启动 Clash Verge（30s 冷却） |
 | `idleMs` | `300000` | 空闲多久关浏览器（5 分钟） |
 | `usage` | `auto` | 输入框开关：`off` / `auto` / `force` |
 | `sessionUsage` | `{}` | 按会话覆盖 `usage`（键是 sessionId） |
@@ -403,6 +405,26 @@ node --test test/
 运行时的代码是 `node_modules` 里那份，**不是**你改的那份。细节见 [CONTRIBUTING.md](CONTRIBUTING.md)。
 
 架构与内部流程见 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)；面向使用者的完整手册（含每个参数的边界值、登录状态机、client/宿主分工）见 [docs/MANUAL.md](docs/MANUAL.md)。
+
+## 依赖与致谢
+
+### Clash Verge（可选依赖，不打包）
+
+插件本身不带代理内核。检测到「代理端口不通」时，会尝试帮你启动 **Clash Verge**：
+
+| 项 | 值 |
+|---|---|
+| 项目 | [clash-verge-rev/clash-verge-rev](https://github.com/clash-verge-rev/clash-verge-rev) |
+| 作者 | zzzgydi 与 [Clash Verge Rev 贡献者](https://github.com/clash-verge-rev/clash-verge-rev/graphs/contributors) |
+| 许可 | GPL-3.0 |
+| 本插件怎么用它 | 只 `spawn` 它的可执行文件，等待 `proxyUrl` 端口就绪；不修改它的配置、不读取它的订阅 |
+
+- 设置项：`clashPath`（留空自动找）、`autoStartClash`（默认开）
+- 面板按钮：**设置 → 浏览器代理 → 启动 Clash Verge**
+- 工具动作：`browser_proxy({ action: "clash" })` / `browser_proxy({ action: "clash-start" })`
+- 路径探测顺序：`DSH_CLASH` → `%LOCALAPPDATA%\Programs\Clash Verge` → `%LOCALAPPDATA%\Clash Verge` →
+  `C:\Program Files\Clash Verge` → `(x86)` → macOS `/Applications/Clash Verge.app`
+- 不想让它自动启动：关掉 `autoStartClash`，或把 `proxyMode` 设成 `never`
 
 ## 许可
 

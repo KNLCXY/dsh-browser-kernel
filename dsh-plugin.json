@@ -3,7 +3,7 @@
   "manifestVersion": "0.15",
   "id": "dsh-websift.local",
   "name": "dsh-websift",
-  "version": "0.9.15",
+  "version": "0.9.16",
   "license": "MIT",
   "facets": {
     "host": {
