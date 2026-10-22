@@ -1,0 +1,21 @@
+# dsh-browser-kernel bundle patch — 把本插件插进 profile 的组合里。
+#
+# 这里的 config 是「出厂默认」；运行时改动写进
+# ~/.dsh/storages/browser-kernel/settings.json（优先级更高，立即生效）。
+# 也可以在 Web GUI 的「设置 → 浏览器代理」里改，不用碰这个文件。
+- insert:
+    - id: dsh-browser-kernel
+      name: dsh-browser-kernel
+      config:
+        # ⚠️ 换机器第一件事：改成你自己机器上的 Chrome/Chromium 绝对路径。
+        # 任何能跑 --remote-debugging-port 的内核都行（Chrome / Edge / Brave / OCS 内置版）。
+        # 桌面应用自带内核常见位置：<应用目录>/resources/bin/chrome/chrome/chrome.exe
+        chromePath: 'C:\Program Files\Google\Chrome\Application\chrome.exe'
+        # CDP 调试端口，别和别的调试端口撞
+        port: 9333
+        # 本机代理（Clash Verge 的 mixed 端口就是 7897）
+        proxyUrl: 'http://127.0.0.1:7897'
+        # auto = 每个新域名先试直连，不通才走代理；always = 一律代理；never = 一律直连
+        proxyMode: auto
+        # 空闲 5 分钟后自动关闭浏览器（headless Chrome 约 700MB）
+        idleMs: 300000

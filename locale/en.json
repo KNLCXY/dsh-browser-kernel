@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Browser Kernel",
+    "description": "Browser kernel for DSH: a real headless Chrome (render JS, screenshots, DOM) plus web_digest — search, fetch, extract key sentences and return one compact digest, cutting context tokens by 80–90%."
+  }
+}
