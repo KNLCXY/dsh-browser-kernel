@@ -1,6 +1,6 @@
 {
   "meta": {
-    "title": "Browser Kernel",
-    "description": "Browser kernel for DSH: a real headless Chrome (render JS, screenshots, DOM) plus web_digest — search, fetch, extract key sentences and return one compact digest, cutting context tokens by 80–90%."
+    "title": "Browser kernel · token-saving digests",
+    "description": "Token-efficient web reading for DeepSeek Harness, powered by a real Chrome over CDP. One call fetches several pages, gates them by relevance and returns a single digest (80-98% fewer context tokens). Real search URLs, login flow, screenshots, auto proxy."
   }
 }

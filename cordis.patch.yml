@@ -1,11 +1,11 @@
-# dsh-browser-kernel bundle patch — 把本插件插进 profile 的组合里。
+# dsh-websift bundle patch — 把本插件插进 profile 的组合里。
 #
 # 这里的 config 是「出厂默认」；运行时改动写进
 # ~/.dsh/storages/browser-kernel/settings.json（优先级更高，立即生效）。
 # 也可以在 Web GUI 的「设置 → 浏览器代理」里改，不用碰这个文件。
 - insert:
-    - id: dsh-browser-kernel
-      name: dsh-browser-kernel
+    - id: dsh-websift
+      name: dsh-websift
       config:
         # ⚠️ 换机器第一件事：改成你自己机器上的 Chrome/Chromium 绝对路径。
         # 任何能跑 --remote-debugging-port 的内核都行（Chrome / Edge / Brave / OCS 内置版）。

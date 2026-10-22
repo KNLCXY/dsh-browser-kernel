@@ -9,8 +9,8 @@
 - 一份 Chromium 系内核（Chrome / Edge / Brave / OCS 内置的都行）
 
 ```bash
-git clone https://github.com/KNLCXY/dsh-browser-kernel.git
-cd dsh-browser-kernel
+git clone https://github.com/KNLCXY/dsh-websift.git
+cd dsh-websift
 dsh plugin --profile <你的 profile> add "file:$PWD"
 # 改 cordis.patch.yml 或 ~/.dsh/storages/browser-kernel/settings.json 里的 chromePath
 ```

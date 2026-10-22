@@ -1,4 +1,4 @@
-"""生成 dsh-browser-kernel 的插件图标（256×256 PNG）。"""
+"""生成 dsh-websift 的插件图标（256×256 PNG）。"""
 from PIL import Image, ImageDraw
 
 S = 256
@@ -37,5 +37,5 @@ d.ellipse([cx - r, cy - r, cx + r, cy + r], outline=blue, width=6)
 d.line([cx - r + 4, cy, cx + r - 4, cy], fill=blue, width=5)
 d.ellipse([cx - 11, cy - r, cx + 11, cy + r], outline=blue, width=4)
 
-img.save(r"C:\Users\Administrator\Documents\deepseek-harness\default-workspace\plugins\dsh-browser-kernel\docs\icon.png", "PNG")
+img.save(r"C:\Users\Administrator\Documents\deepseek-harness\default-workspace\plugins\dsh-websift\docs\icon.png", "PNG")
 print("ok", img.size)

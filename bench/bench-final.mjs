@@ -1,11 +1,14 @@
 // 定参数：旧版（全局 1200） vs 新版分级（长页 2000/3000/4000），3 轮
-import { readFileSync, writeFileSync } from 'node:fs';
-import { pathToFileURL } from 'node:url';
+import { dirname, join as pathJoin } from 'node:path';
+import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
-const SRC = 'C:/Users/Administrator/Documents/deepseek-harness/default-workspace/plugins/dsh-browser-kernel/lib/index.js';
-const TOOLS = 'C:/Users/Administrator/Desktop/DeepSeek Harness/resources/app.asar/dsh/node_modules/@deepseek-ai/dsh-tools/lib/index.js';
+const SRC = fileURLToPath(new URL('../lib/index.js', import.meta.url));
+const TOOLS = process.env.DSH_TOOLS || 'C:/Users/Administrator/Desktop/DeepSeek Harness/resources/app.asar/dsh/node_modules/@deepseek-ai/dsh-tools/lib/index.js';
+const TOOLS_IMPORT = existsSync(TOOLS) ? `from '${pathToFileURL(TOOLS).href}'` : "from 'data:text/javascript,export const defineTool = (d) => d'";
 const OUT = 'C:/Users/Administrator/AppData/Local/Temp/bk-final.mjs';
-writeFileSync(OUT, readFileSync(SRC, 'utf8').replace("from '@deepseek-ai/dsh-tools'", `from '${pathToFileURL(TOOLS).href}'`), 'utf8');
+writeFileSync(OUT, readFileSync(SRC, 'utf8').replace("from '@deepseek-ai/dsh-tools'", TOOLS_IMPORT), 'utf8');
+writeFileSync(pathJoin(dirname(OUT), 'rank.js'), readFileSync(pathJoin(dirname(SRC), 'rank.js'), 'utf8'), 'utf8');
 const mod = await import(pathToFileURL(OUT).href + '?t=' + Date.now());
 const { stripHtml, pickSentences, queryTerms, extractSmart, EXTRACT_POLICY } = mod.__bench;
 

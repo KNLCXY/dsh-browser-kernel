@@ -1,17 +1,26 @@
-# dsh-browser-kernel
+# dsh-websift
 
-**给 [DeepSeek Harness](https://deepseek.com)（DSH）装一颗真浏览器。** 用本机已有的 Chrome 内核（headless + CDP）打开网页，把「搜索 → 抓正文 → 抽关键句」压成一段摘要，再配一套自动代理切换。注册成 **4 个 agent 工具**，装一次，每个会话、每个工作区都能用。
+**两件事：把网页压成 token，把检索变准。**
+
+| 能力线 | 做什么 |
+|---|---|
+| **压缩** | 整页正文 → 一段带账本的摘要。按正文字数分档给预算（1200 / 3000 / 4000），抽取式、不调模型，实测压缩 80–98% |
+| **检索** | 搜前清洗（去「帮我搜一下」这类壳、拆别名）→ 按标题重合重排、丢首页与符号堆砌 → 抓完按 URL + 正文指纹去重 → 相关性闸门（不命中就明说，不硬凑） |
+
+底座是一颗真 Chrome（headless + CDP）：JS 渲染、登录态、真实搜索结果链接、截图、三档代理。压缩和检索都在**宿主进程**里完成，不额外调用模型 —— 所以省下来的 token 是真省，不是换个地方花。
+
+装一次，四个工具在**每个会话、每个工作区**都有：
 
 ```
-browser        打开网址，拿 JS 渲染之后的内容：正文 / DOM / 截图 / 执行 JS / 弹出登录
-web_find       用真浏览器搜一次，只返回真实链接（不是 so.com/link 那种跳转壳）
-web_digest     搜索或给定链接 → 抓正文 → 相关性闸门 → 抽取式摘要（省 80–98% 上下文 token）
+web_digest     搜索或给定链接 → 抓正文 → 相关性闸门 → 摘要（省 80–98% token）
+web_find       真浏览器搜一次，只返回真实链接（不是 so.com/link 那种跳转壳）
+browser        打开网址取 JS 渲染之后的内容：正文 / DOM / 截图 / 执行 JS / 弹窗登录
 browser_proxy  查看 / 切换 / 探测代理，实时生效，不用重启 DSH
 ```
 
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![dsh](https://img.shields.io/badge/DSH-0.2.x-black)](https://github.com/deepseek-ai)
-[![release](https://img.shields.io/github/v/release/KNLCXY/dsh-browser-kernel?label=release)](https://github.com/KNLCXY/dsh-browser-kernel/releases/latest)
+[![release](https://img.shields.io/github/v/release/KNLCXY/dsh-websift?label=release)](https://github.com/KNLCXY/dsh-websift/releases/latest)
 
 ---
 
@@ -19,10 +28,10 @@ browser_proxy  查看 / 切换 / 探测代理，实时生效，不用重启 DSH
 
 不想 clone 就直接拿打包好的安装包：
 
-**[⬇ dsh-browser-kernel-0.9.8.tgz](https://github.com/KNLCXY/dsh-browser-kernel/releases/latest/download/dsh-browser-kernel-0.9.8.tgz)**（约 80 KB，含 `lib/`、`docs/`、`locale/`、图标）
+**[⬇ dsh-websift-0.9.11.tgz](https://github.com/KNLCXY/dsh-websift/releases/latest/download/dsh-websift-0.9.11.tgz)**（约 80 KB，含 `lib/`、`docs/`、`locale/`、图标）
 
 ```bash
-dsh plugin --profile <你的 profile> add "file:<下载路径>/dsh-browser-kernel-0.9.8.tgz"
+dsh plugin --profile <你的 profile> add "file:<下载路径>/dsh-websift-0.9.11.tgz"
 ```
 
 校验（同页附件 `SHA256SUMS.txt`）：
@@ -61,7 +70,7 @@ sha256sum -c SHA256SUMS.txt
 
 DSH 自带的 `web_fetch` 是一个 **HTTP 抓取器**：没有 JS 引擎、不保持登录态、不认系统代理。遇到下面这些它就废了，而 agent 最常撞上的恰恰是这些：
 
-| 场景 | `web_fetch` | `dsh-browser-kernel` |
+| 场景 | `web_fetch` | `dsh-websift` |
 |---|---|---|
 | 页面靠 JS 渲染（SPA、搜索结果页、文档站） | 只拿到「请启用 JavaScript」空壳 | 真 Chrome 跑完 JS 再取 |
 | 搜索结果的跳转壳（`so.com/link?m=…`） | 原样返回壳 | 浏览器点进去，要 DOM 里真实的 `href` |
@@ -84,13 +93,13 @@ DSH 自带的 `web_fetch` 是一个 **HTTP 抓取器**：没有 JS 引擎、不�
 
 ```bash
 # ① 从 git 装（推荐，跟随仓库最新）
-dsh plugin --profile <你的 profile> add github:KNLCXY/dsh-browser-kernel
+dsh plugin --profile <你的 profile> add github:KNLCXY/dsh-websift
 
 # ② 从目录装（要改代码时）
-dsh plugin --profile <你的 profile> add "file:/绝对路径/dsh-browser-kernel"
+dsh plugin --profile <你的 profile> add "file:/绝对路径/dsh-websift"
 
 # ③ 从打包好的 tgz 装（离线分发）
-dsh plugin --profile <你的 profile> add "file:/绝对路径/dsh-browser-kernel-0.9.8.tgz"
+dsh plugin --profile <你的 profile> add "file:/绝对路径/dsh-websift-0.9.8.tgz"
 ```
 
 **装完必须重启 DSH** —— 插件的宿主半和 client 半都在进程启动时组装一次。
@@ -325,7 +334,7 @@ browser_proxy({ action: "stop" })                       // 立刻关掉浏览器
 | `routeTtlMin` | `10` | 代理路由结果缓存分钟数 |
 | `loginPollMs` / `loginStreak` / `loginTimeoutS` | `1500` / `3` / `180` | 登录轮询间隔 / 连续确认次数 / 超时 |
 | `probeTimeoutMs` / `slowVisitMs` | `2500` / `8000` | 直连探测阈值 / 慢站判定 |
-| `profileDir` / `outputDir` | `%TEMP%/dsh-browser-kernel-profile`、`~/.dsh/storages/browser-kernel` | 浏览器 profile / 截图与设置 |
+| `profileDir` / `outputDir` | `%TEMP%/dsh-websift-profile`、`~/.dsh/storages/browser-kernel` | 浏览器 profile / 截图与设置 |
 
 > 每条配置都是「改完即生效」的（下次调用读新值），只有 `chromePath` / `port` 会触发内核重启。
 
@@ -380,7 +389,7 @@ node --test test/
 **改完源码怎么生效**：
 
 1. bump `package.json` 的 `version`
-2. `dsh plugin --profile <profile> add "file:/绝对路径/dsh-browser-kernel"`
+2. `dsh plugin --profile <profile> add "file:/绝对路径/dsh-websift"`
 3. 重启 DSH
 
 运行时的代码是 `node_modules` 里那份，**不是**你改的那份。细节见 [CONTRIBUTING.md](CONTRIBUTING.md)。

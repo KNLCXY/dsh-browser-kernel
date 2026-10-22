@@ -1,9 +1,9 @@
 {
   "$schema": "https://raw.githubusercontent.com/T-Auto/dsh-std/8a15541117cb3c13ddb8f2468308691b6051d162/packages/manifest/schema/dsh-plugin-0.15.schema.json",
   "manifestVersion": "0.15",
-  "id": "dsh-browser-kernel.local",
-  "name": "dsh-browser-kernel",
-  "version": "0.9.10",
+  "id": "dsh-websift.local",
+  "name": "dsh-websift",
+  "version": "0.9.11",
   "license": "MIT",
   "facets": {
     "host": {
@@ -21,12 +21,12 @@
   },
   "permissions": [
     {
-      "name": "dsh-browser-kernel.process.spawn",
+      "name": "dsh-websift.process.spawn",
       "scope": "subprocess",
       "reason": "启动本机 Chrome 内核做 headless 浏览器（CDP 调试端口）。"
     },
     {
-      "name": "dsh-browser-kernel.network.fetch",
+      "name": "dsh-websift.network.fetch",
       "scope": "outbound-network",
       "reason": "页面探测与代理转发；只访问用户指定的网址。"
     }
@@ -35,8 +35,8 @@
     "x-display": [
       {
         "icon": "./docs/icon.png",
-        "title": "浏览器内核",
-        "description": "浏览器内核：用本机 Chrome 打开真网页（渲染 JS / 截图 / 取 DOM），并把「搜索→抓正文→抽关键句」压缩成一段摘要，省 80–90% 上下文 token；代理支持自动切换、强制、直连。",
+        "title": "浏览器内核 · 省 token 摘要",
+        "description": "省 token 的网页阅读：底层是真 Chrome（CDP），一次调用读完多个页面、按相关性筛掉不相关的，只回一段带账本的摘要（省 80–98% 上下文 token）。真实搜索链接、登录态、截图、三档代理。",
         "locales": [
           "locale/en.json",
           "locale/zh.json"

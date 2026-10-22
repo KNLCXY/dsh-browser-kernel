@@ -25,7 +25,7 @@
 ### 注册
 
 ```js
-export const name = 'dsh-browser-kernel'
+export const name = 'dsh-websift'
 export const inject = ['tools', 'webServer']
 
 export function apply (ctx, config) {
@@ -110,7 +110,7 @@ action:"login"
 
 ```js
 window.__ModuleLoader__.load({
-  id: 'dsh-browser-kernel',
+  id: 'dsh-websift',
   factory: (require) => {
     const React = require('react')
     exports.inject = ['slots']

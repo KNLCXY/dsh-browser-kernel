@@ -1,4 +1,5 @@
 // 同一页面：直连 vs 走代理，整页加载差多少
+import { dirname, join as pathJoin } from 'node:path';
 import { setTimeout as sleep } from 'node:timers/promises';
 
 const CHROME = String.raw`C:\Users\Administrator\Desktop\ocs-2.9.24-setup-win-x64\resources\bin\chrome\chrome\chrome.exe`;

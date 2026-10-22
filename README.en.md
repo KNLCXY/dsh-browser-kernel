@@ -1,13 +1,17 @@
-# dsh-browser-kernel
+# dsh-websift
 
-A **real browser** for [DeepSeek Harness](https://deepseek.com) (DSH), exposed as four agent tools. It drives a local Chrome/Chromium over the DevTools Protocol (headless by default), so the agent gets what HTTP fetching can never give it: JS-rendered pages, real search-result URLs instead of redirect wrappers, logged-in sessions, screenshots — plus a digest pipeline that compresses "search → fetch → extract" into one call and cuts context tokens by 80–98%.
+**One call, several pages read, one digest back — 80–98% fewer context tokens.**
+
+The engine is a real Chrome (headless, driven over the DevTools Protocol), so JS-rendered pages, real search-result URLs, logged-in sessions and screenshots all work. But what the agent gets is not "another browser tool": it is a pipeline that does **search → fetch → relevance gate → extract** end to end. Full page text stays inside the host process; the model only sees the final digest plus a ledger.
 
 ```
-browser        open a URL and get post-JS content: text / outerHTML / screenshot / eval / login
+web_digest     search or given URLs → fetch → relevance gate → digest (80–98% fewer tokens)
 web_find       one real browser search, returns real hrefs (no so.com/link redirect shells)
-web_digest     search or given URLs → fetch → relevance gate → extractive digest
+browser        open a URL and get post-JS content: text / outerHTML / screenshot / eval / login
 browser_proxy  inspect / switch / probe the proxy, effective immediately, no restart
 ```
+
+Why "browser + digest" instead of just a browser: accessibility trees, sidebar takeovers and visual grounding are already done better elsewhere. The trade-off here is **context economy** — five pages cost one paragraph, non-matching pages say so instead of being padded into a fake summary, and a JS shell is escalated to a real browser.
 
 > The project is developed against the Chinese-speaking DSH community; the detailed manual ([README.md](README.md), [docs/MANUAL.md](docs/MANUAL.md)) is in Chinese. This file is the English overview.
 
@@ -29,9 +33,9 @@ Design rule: **one call, one result.** Returning a summary after every step mean
 ## Install
 
 ```bash
-dsh plugin --profile <profile> add github:KNLCXY/dsh-browser-kernel
+dsh plugin --profile <profile> add github:KNLCXY/dsh-websift
 # or, from a checkout / a tarball:
-dsh plugin --profile <profile> add "file:/absolute/path/dsh-browser-kernel"
+dsh plugin --profile <profile> add "file:/absolute/path/dsh-websift"
 ```
 
 Restart DSH afterwards — both the host and the client half are assembled at process start.

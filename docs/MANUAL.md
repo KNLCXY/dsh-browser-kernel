@@ -1,4 +1,4 @@
-# dsh-browser-kernel 使用说明书
+# dsh-websift 使用说明书
 
 > 版本 **0.9.7** · 适用 DSH `0.2.1-rc.2` · 作者：本机自制
 > 一句话：给 DSH 装一个**真浏览器**，并把它抓到的内容**压到只剩有用的部分**再交给模型。
@@ -45,7 +45,7 @@ DSH 自带的 `web_fetch` 有三个硬伤：
 ### 安装（本机）
 
 ```bash
-dsh plugin --profile desktop add "file:C:/Users/Administrator/Documents/deepseek-harness/default-workspace/plugins/dsh-browser-kernel"
+dsh plugin --profile desktop add "file:C:/Users/Administrator/Documents/deepseek-harness/default-workspace/plugins/dsh-websift"
 ```
 
 装完**必须重启 DSH**——插件的宿主半和客户端半都是在进程启动时装配的。
@@ -62,7 +62,7 @@ dsh plugin --profile desktop add "file:C:/Users/Administrator/Documents/deepseek
 ### 卸载
 
 ```bash
-dsh plugin --profile desktop remove dsh-browser-kernel
+dsh plugin --profile desktop remove dsh-websift
 ```
 
 浏览器进程会在空闲 5 分钟后自行退出；想立刻清掉：`browser_proxy({ action: "stop" })`。
@@ -627,7 +627,7 @@ browser({ url: "...", action: "screenshot" })
 ### 文件布局
 
 ```
-plugins/dsh-browser-kernel/
+plugins/dsh-websift/
 ├── lib/
 │   ├── index.js      宿主：4 个工具、路由、抓取与摘要算法
 │   ├── rank.js       搜前清洗、别名、标题重排（find / digest 共用）
@@ -646,7 +646,7 @@ plugins/dsh-browser-kernel/
 # 1. 改 lib/index.js、lib/rank.js 或 lib/client.js
 # 2. bump 版本（pnpm 对 file: 依赖不变更版本会 "Already up to date"）
 # 3. 重新安装
-dsh plugin --profile desktop remove dsh-browser-kernel
+dsh plugin --profile desktop remove dsh-websift
 dsh plugin --profile desktop add "file:<路径>"
 # 4. 重启 DSH
 ```
