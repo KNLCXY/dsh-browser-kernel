@@ -2,6 +2,16 @@
 
 本项目从「工作区脚本」长成「profile 级插件」，版本号按功能块递进。较早的条目按系列合并记录，细节以 `git log` 为准。
 
+## 0.9.13
+
+- 设置面板加「**自动探测**」：点一下列出本机所有可用内核（Chrome / Edge / Brave /
+  应用自带 / `DSH_CHROME`），点一个就填进路径；另有「留空 / 用自动」一键回到自动探测
+- 新增宿主路由 `GET /_browser-kernel/chrome-candidates`（只回真正存在的路径）
+- 面板补齐「调试端口」输入（1024–65535，改完会重启内核）
+- 设置项覆盖审计：`visible` / `quiet` / `factExempt` / `showDock` / `proxyMode` / 预算与缓存
+  等全部可在面板改；只有 `profileDir` / `outputDir` 故意不暴露（前者是浏览器 profile，
+  后者决定 settings.json 的位置，改它们会把配置拆成两份）
+
 ## 0.9.12
 
 - **内核路径自动探测**：`chromePath` 留空、写成 `auto`、或指向一个不存在的文件时，按
