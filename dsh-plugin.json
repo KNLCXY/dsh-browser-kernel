@@ -3,7 +3,7 @@
   "manifestVersion": "0.15",
   "id": "dsh-browser-kernel.local",
   "name": "dsh-browser-kernel",
-  "version": "0.9.8",
+  "version": "0.9.9",
   "license": "MIT",
   "facets": {
     "host": {
