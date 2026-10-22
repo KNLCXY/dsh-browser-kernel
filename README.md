@@ -111,8 +111,13 @@ dsh plugin --profile <你的 profile> add "file:/绝对路径/dsh-websift-0.9.8.
 ```
 环境变量 DSH_CHROME
 → 系统安装的 Chrome / Edge / Brave / Chromium
-→ 应用自带的内核（resources/bin/chrome/…、桌面应用目录）
+→ 有界扫描：%LOCALAPPDATA%、%APPDATA%、Program Files、(x86)、~/Desktop、DSH/resources
+  （深度 4–5，认识豆包 / 夸克 / 360 / QQ / 搜狗 / UC / 猎豹 / Vivaldi / Opera，
+   并要求目录里有 icudtl.dat 或 *.pak 才算真内核）
 ```
+
+应用内置内核（豆包、夸克等）多是 Electron 套壳：能找到、能选，但可能只打开它自己的界面，
+不一定能当浏览器用——优先选标准浏览器。
 
 找不到才需要你手动指一个：
 

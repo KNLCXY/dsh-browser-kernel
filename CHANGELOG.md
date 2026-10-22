@@ -2,6 +2,20 @@
 
 本项目从「工作区脚本」长成「profile 级插件」，版本号按功能块递进。较早的条目按系列合并记录，细节以 `git log` 为准。
 
+## 0.9.15
+
+自动探测重写：从「3 个固定目录 + 只下一层」换成「多根目录 + 有界 BFS + Chromium 特征校验」。
+
+- 扫描根目录：`DSH/resources`、`%LOCALAPPDATA%`、`%LOCALAPPDATA%\Programs`、`%APPDATA%`、
+  `%ProgramFiles%`、`%ProgramFiles(x86)%`、`~/Desktop`；深度 4–5、目录数上限 4000
+- 认识的可执行文件：chrome / chromium / msedge / brave / vivaldi / opera / **doubao（豆包）** /
+  **quark（夸克）** / 360se / QQBrowser / SogouExplorer / UCBrowser / liebao / yandex
+- **校验**：所在目录必须有 `icudtl.dat` 或 `*.pak`，避免把同名 exe 当内核
+- 排序：标准浏览器优先（chrome → edge → brave → chromium → 其他），应用内置排最后
+- 实测：本机扫到 3 个（Chrome / Edge / 豆包），耗时 ~250ms
+- 注意：豆包、夸克这类是 **Electron 应用**，能暴露 CDP 但可能只打开它自己的界面，
+  不一定能当浏览器用；优先选标准浏览器
+
 ## 0.9.14
 
 修可视化 / 安静的窗口逻辑（两者只看「可视化」开关，安静只决定要不要置前）：
