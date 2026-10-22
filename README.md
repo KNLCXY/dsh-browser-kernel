@@ -104,22 +104,25 @@ dsh plugin --profile <你的 profile> add "file:/绝对路径/dsh-websift-0.9.8.
 
 **装完必须重启 DSH** —— 插件的宿主半和 client 半都在进程启动时组装一次。
 
-### 第一件要做的事：改内核路径
+### 内核路径：一般不用改
 
-出厂默认指向作者机器上的 OCS Desktop 内置 Chrome。换机器必须改，三种改法任选：
+**留空 = 自动探测。** 插件会按顺序找：
 
-```yaml
-# cordis.patch.yml（出厂默认，改完重启）
-config:
-  chromePath: 'C:\Program Files\Google\Chrome\Application\chrome.exe'
+```
+环境变量 DSH_CHROME
+→ 系统安装的 Chrome / Edge / Brave / Chromium
+→ 应用自带的内核（resources/bin/chrome/…、桌面应用目录）
 ```
 
+找不到才需要你手动指一个：
+
 ```jsonc
-// ~/.dsh/storages/browser-kernel/settings.json（优先级更高，改完立即生效）
+// ~/.dsh/storages/browser-kernel/settings.json
 { "chromePath": "C:/Program Files/Google/Chrome/Application/chrome.exe" }
 ```
 
-或者打开 **设置 → 浏览器代理 → 自定义 → 内核路径**（会校验必须是 `.exe`）。
+或者在 **设置 → 浏览器代理 → 自定义 → 内核路径** 里填（校验 `.exe`）。
+状态行会标明当前用的是哪个内核、是不是自动探测来的。
 
 > 没有 Chrome？Edge 也行，Chromium 系的都可以：任何能跑 `--remote-debugging-port` 的内核都能用。
 
