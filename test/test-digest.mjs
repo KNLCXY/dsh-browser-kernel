@@ -1,19 +1,9 @@
-// 测 web_digest：用假 ctx + 真实网络的 web stub（search 返回固定链接，fetch 真抓）
-import { readFileSync, writeFileSync } from 'node:fs';
-import { pathToFileURL } from 'node:url';
+import { loadPlugin } from './_setup.mjs'
 
-const SRC = 'C:/Users/Administrator/Documents/deepseek-harness/default-workspace/plugins/dsh-browser-kernel/lib/index.js';
-const TOOLS = 'C:/Users/Administrator/Desktop/DeepSeek Harness/resources/app.asar/dsh/node_modules/@deepseek-ai/dsh-tools/lib/index.js';
-const OUT = 'C:/Users/Administrator/AppData/Local/Temp/bk-digest.mjs';
-
-const src = readFileSync(SRC, 'utf8').replace(
-  "from '@deepseek-ai/dsh-tools'",
-  `from '${pathToFileURL(TOOLS).href}'`,
-);
-writeFileSync(OUT, src, 'utf8');
-
-const mod = await import(pathToFileURL(OUT).href + '?t=' + Date.now());
-
+// 插件源码里的 '@deepseek-ai/dsh-tools' 会被指到 DSH 里的真实实现；
+// 找不到时退化成桩（纯逻辑测试仍可跑）。要显式指定：DSH_TOOLS=/path/to/dsh-tools/lib/index.js
+const { mod, toolsPath } = await loadPlugin()
+if (!toolsPath) console.warn('⚠️  没找到 DSH 的 @deepseek-ai/dsh-tools，使用桩实现')
 const SOURCES = [
   { url: 'https://github.com/cinob/dsh-web-search-multi', title: 'dsh-web-search-multi · GitHub' },
   { url: 'https://example.com/', title: 'Example Domain' },

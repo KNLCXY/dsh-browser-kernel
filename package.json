@@ -75,5 +75,12 @@
       "inject": [],
       "external": []
     }
+  },
+  "scripts": {
+    "test": "node test/test-rank.mjs",
+    "test:json": "node test/test-json.mjs",
+    "test:digest": "node test/test-digest.mjs",
+    "test:find": "node test/test-find.mjs",
+    "test:offline": "node test/test-offline.mjs"
   }
 }

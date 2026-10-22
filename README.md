@@ -11,6 +11,28 @@ browser_proxy  查看 / 切换 / 探测代理，实时生效，不用重启 DSH
 
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![dsh](https://img.shields.io/badge/DSH-0.2.x-black)](https://github.com/deepseek-ai)
+[![release](https://img.shields.io/github/v/release/KNLCXY/dsh-browser-kernel?label=release)](https://github.com/KNLCXY/dsh-browser-kernel/releases/latest)
+
+---
+
+## 下载
+
+不想 clone 就直接拿打包好的安装包：
+
+**[⬇ dsh-browser-kernel-0.9.7.tgz](https://github.com/KNLCXY/dsh-browser-kernel/releases/latest/download/dsh-browser-kernel-0.9.7.tgz)**（79 KB，含 `lib/`、`docs/`、`locale/`、图标）
+
+```bash
+dsh plugin --profile <你的 profile> add "file:<下载路径>/dsh-browser-kernel-0.9.7.tgz"
+```
+
+校验（同页附件 `SHA256SUMS.txt`）：
+
+```bash
+sha256sum -c SHA256SUMS.txt
+```
+
+源码可以直接用 Release 页底部的 **Source code (zip / tar.gz)**，也可以 `git clone`。
+每个版本都会打 tag（当前 `v0.9.7`）。
 
 ---
 

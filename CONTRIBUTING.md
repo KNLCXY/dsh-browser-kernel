@@ -29,14 +29,25 @@ docs/MANUAL.md    长手册；docs/ARCHITECTURE.md 是内部流程
 ## 自测
 
 ```bash
-# 纯逻辑（Node 直接跑）
-node --test test/
+# 纯逻辑，不联网、不需要 DSH —— 提交前至少跑这个
+npm test                      # = node test/test-rank.mjs
 
-# 集成：用假 ctx 跑 apply()，真的打开网页验证四种 action 和代理模式
-ELECTRON_RUN_AS_NODE=1 "<DSH 目录>/DeepSeek Harness.exe" test/test-offline.mjs
+# 需要网络（真的去抓页面；没有 token / 代理会失败）
+node test/test-json.mjs       # JSON 直读：16k 字符的 API 响应压成多少字
+node test/test-digest.mjs     # web_digest 全链路（固定链接 + 真抓）
+
+# 需要真浏览器（会拉起 Chrome 内核）
+node test/test-find.mjs       # web_find 返回的是不是真实链接
+node test/test-offline.mjs    # 假 ctx 跑 apply()，验证四种 action 与代理模式
 ```
 
-`test-offline.mjs` 会把源码里的 `@deepseek-ai/dsh-tools` 指向 asar 里的真实实现——这是能脱离 DSH 进程验证宿主半的唯一办法。
+测试不依赖任何硬编码路径：`test/_setup.mjs` 会把 `lib/` 整个复制到临时目录，并把
+`@deepseek-ai/dsh-tools` 指到 DSH 里的真实实现；**找不到时退化成桩**（所以纯逻辑测试在哪都能跑）。
+要显式指定实现路径：
+
+```bash
+DSH_TOOLS=/path/to/@deepseek-ai/dsh-tools/lib/index.js npm test
+```
 
 改了摘要逻辑，请顺手跑 `bench/bench-final.mjs` 和 `bench/reg-fact.mjs`，把前后数字写进 PR 描述（尤其是 token 数和召回率，别只写「感觉更好了」）。
 

@@ -1,13 +1,9 @@
-// 测 web_find：用真浏览器搜，看返回的是不是真实链接
-import { readFileSync, writeFileSync } from 'node:fs';
-import { pathToFileURL } from 'node:url';
+import { loadPlugin } from './_setup.mjs'
 
-const SRC = 'C:/Users/Administrator/Documents/deepseek-harness/default-workspace/plugins/dsh-browser-kernel/lib/index.js';
-const TOOLS = 'C:/Users/Administrator/Desktop/DeepSeek Harness/resources/app.asar/dsh/node_modules/@deepseek-ai/dsh-tools/lib/index.js';
-const OUT = 'C:/Users/Administrator/AppData/Local/Temp/bk-find.mjs';
-writeFileSync(OUT, readFileSync(SRC, 'utf8').replace("from '@deepseek-ai/dsh-tools'", `from '${pathToFileURL(TOOLS).href}'`), 'utf8');
-const mod = await import(pathToFileURL(OUT).href + '?t=' + Date.now());
-
+// 插件源码里的 '@deepseek-ai/dsh-tools' 会被指到 DSH 里的真实实现；
+// 找不到时退化成桩（纯逻辑测试仍可跑）。要显式指定：DSH_TOOLS=/path/to/dsh-tools/lib/index.js
+const { mod, toolsPath } = await loadPlugin()
+if (!toolsPath) console.warn('⚠️  没找到 DSH 的 @deepseek-ai/dsh-tools，使用桩实现')
 const tools = [];
 mod.apply({
   tools: { register: (t) => tools.push(t) },

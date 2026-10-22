@@ -1,19 +1,9 @@
-// 离线测试：把插件源码里的 '@deepseek-ai/dsh-tools' 换成本机 asar 里的真实实现，
-// 然后用一个假 ctx 跑 apply()，拿到注册的 tool 定义并真的执行。
-import { readFileSync, writeFileSync } from 'node:fs';
-import { pathToFileURL } from 'node:url';
+import { loadPlugin } from './_setup.mjs'
 
-const SRC = 'C:/Users/Administrator/Documents/deepseek-harness/default-workspace/plugins/dsh-browser-kernel/lib/index.js';
-const TOOLS = 'C:/Users/Administrator/Desktop/DeepSeek Harness/resources/app.asar/dsh/node_modules/@deepseek-ai/dsh-tools/lib/index.js';
-const OUT = 'C:/Users/Administrator/AppData/Local/Temp/bk-test.mjs';
-
-const src = readFileSync(SRC, 'utf8').replace(
-  'from \'@deepseek-ai/dsh-tools\'',
-  `from '${pathToFileURL(TOOLS).href}'`,
-);
-writeFileSync(OUT, src, 'utf8');
-
-const mod = await import(pathToFileURL(OUT).href + '?t=' + Date.now());
+// 插件源码里的 '@deepseek-ai/dsh-tools' 会被指到 DSH 里的真实实现；
+// 找不到时退化成桩（纯逻辑测试仍可跑）。要显式指定：DSH_TOOLS=/path/to/dsh-tools/lib/index.js
+const { mod, toolsPath } = await loadPlugin()
+if (!toolsPath) console.warn('⚠️  没找到 DSH 的 @deepseek-ai/dsh-tools，使用桩实现')
 console.log('plugin name:', mod.name, '| inject:', mod.inject);
 
 const tools = [];

@@ -1,6 +1,6 @@
 // 0.9.7 回归：query 清洗、别名拆分、标题重合排序。不启动浏览器。
 import assert from 'node:assert/strict'
-import { normalizeQuery, rankSearchResults, titleQuality } from './lib/rank.js'
+import { normalizeQuery, rankSearchResults, titleQuality } from '../lib/rank.js'
 
 function cleaned(q) {
   return normalizeQuery(q).cleaned
