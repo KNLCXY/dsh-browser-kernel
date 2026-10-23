@@ -1,6 +1,6 @@
 # dsh-websift 使用说明书
 
-> 版本 **0.9.17** · 适用 DSH `0.2.1-rc.2` · 作者：KNLCXY
+> 版本 **0.9.18** · 适用 DSH `0.2.1-rc.2` · 作者：KNLCXY
 > 一句话：给 DSH 装一个**真浏览器**，并把它抓到的内容**压到只剩有用的部分**再交给模型。
 
 ---
@@ -295,6 +295,7 @@ browser({
 | 字段 | 默认 | 说明 |
 |---|---|---|
 | `factExempt` | 开 | 事实句豁免：带单位的数字/版本号不会被门槛删掉 |
+| `builtinSearch` | 关 | 是否用 DSH 内置搜索 provider。关（默认）= 直接走浏览器搜索；开 = 先试 `ctx.web.search`，失败再回退 |
 | `cacheTtlMin` | 15 | 页面缓存有效期 |
 | `cacheMax` | 60 | 缓存条数 |
 | `routeTtlMin` | 10 | 路由判断缓存 |
@@ -629,6 +630,7 @@ browser({ url: "...", action: "screenshot" })
 | 0.9.15 | 探测重写：多根目录 + 有界 BFS + Chromium 特征校验（`icudtl.dat` / `*.pak`） |
 | 0.9.16 | Clash Verge 联动（可选）：端口不通时自动启动，面板加状态卡片与开关 |
 | 0.9.17 | `proxyMode: "never"` 时不再自动启动 Clash |
+| 0.9.18 | 新增 `builtinSearch`（默认关）：内置搜索 provider 改成可选，关掉后不再把 ambiguous 报错挂进结果 |
 
 ---
 

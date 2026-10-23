@@ -2,6 +2,16 @@
 
 本项目从「工作区脚本」长成「profile 级插件」，版本号按功能块递进。较早的条目按系列合并记录，细节以 `git log` 为准。
 
+## 0.9.18
+
+新增设置项 **`builtinSearch`（默认关）**：把 DSH 内置的搜索 provider 变成可选。
+
+- 关（默认）：`web_digest` 直接走浏览器搜索，不再调用 `ctx.web.search()` —— 结果头里那句
+  `multiple usable web providers are registered …` 不会再出现
+- 开：先试 `ctx.web.search()`，失败再回退浏览器，并把真实原因如实写进备注
+- 设置面板「高级设置」多一个开关；`GET/POST /_browser-kernel/settings` 都支持该字段
+- 实测：关 → provider 调用 0 次、输出无报错；开 → 调用 1 次、报错如实出现在备注
+
 ## 0.9.17
 
 - 修：`proxyMode: "never"`（一律直连）时不再自动启动 Clash Verge —— 之前会无视该模式照样拉起

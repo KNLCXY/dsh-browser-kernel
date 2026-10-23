@@ -315,6 +315,7 @@ browser_proxy({ action: "stop" })                       // 立刻关掉浏览器
 2. **自定义**：代理地址（`http://`、`https://`、`socks5://`）、空闲关闭秒数（30–21600）、内核路径（必须 `.exe`）。宿主侧校验，非法值直接 400，不会静默写坏
 3. **状态**：浏览器是否运行 / 走不走代理 / 调试端口 / 配置文件路径 / 刷新
 4. 输入框右上角还有一个 **关 / 按需 / 强制** 三档开关（`conversation.input.dock` 插槽），按会话记
+5. **高级设置**里还有一个「内置搜索 provider」开关（默认关）：开了 `web_digest` 才去试 `ctx.web.search`，失败再回退浏览器
 
 改内核路径或端口会先关掉正在跑的浏览器（旧进程已经不匹配新设置），下次调用按新参数拉起。
 
@@ -339,6 +340,7 @@ browser_proxy({ action: "stop" })                       // 立刻关掉浏览器
 | `shortMaxChars` / `midMaxChars` / `hugeMaxChars` | `3000` / `15000` / `50000` | 分档阈值 |
 | `shortBudget` / `midBudget` / `longBudget` / `hugeBudget` | `1200` / `1200` / `3000` / `4000` | 分档预算 |
 | `factExempt` | `true` | 带单位的数字豁免相关性闸门 |
+| `builtinSearch` | `false` | 是否用 DSH 内置搜索 provider（`ctx.web.search`）。默认关：多个 provider 未指定默认时会报 ambiguous，关掉后直接走浏览器搜索，结果头也不会再挂那句报错 |
 | `cacheTtlMin` / `cacheMax` | `15` / `60` | 页面缓存分钟数 / 条数 |
 | `pageWaitMs` / `waitMs` | `45000` / `600` | 页面加载上限 / 加载后再等 |
 | `routeTtlMin` | `10` | 代理路由结果缓存分钟数 |
