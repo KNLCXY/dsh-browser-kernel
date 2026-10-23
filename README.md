@@ -41,7 +41,7 @@ sha256sum -c SHA256SUMS.txt
 ```
 
 源码可以直接用 Release 页底部的 **Source code (zip / tar.gz)**，也可以 `git clone`。
-每个版本都会打 tag（当前 `v0.9.17`）。
+每个版本都会打 tag（当前 `v0.9.18`，标记为预发布；稳定版仍是 `v0.9.17`）。
 
 ---
 
