@@ -2,6 +2,18 @@
 
 本项目从「工作区脚本」长成「profile 级插件」，版本号按功能块递进。较早的条目按系列合并记录，细节以 `git log` 为准。
 
+## 0.9.19
+
+把 0.9.18 的布尔开关换成 **`stack` 两套完整方案**，各走各的、不混搭：
+
+- `plugin`（默认）：搜索用真浏览器，抓正文也用浏览器，**完全不碰 `ctx.web.*`**
+  —— 不再有 provider 歧义报错，也不再出现「搜索用插件、抓取用官方」的半吊子状态
+- `official`：搜索走 `ctx.web.search`，抓取走 `ctx.web.fetch`，抓取失败才回退浏览器
+- 设置面板改成两个按钮（插件自带 / 官方 API）；`GET/POST /_browser-kernel/settings` 用 `stack` 字段
+- 兼容 0.9.18 的 `builtinSearch` 布尔值：只有没写 `stack` 时才按旧值映射
+- 浏览器抓取补上 JSON 识别：Chrome 把 JSON 原样渲染成文本时同样压成紧凑行，保住「JSON 直读」的收益
+- 实测：plugin 模式 `web.search` 0 次 / `web.fetch` 0 次；official 模式各 1 次
+
 ## 0.9.18
 
 新增设置项 **`builtinSearch`（默认关）**：把 DSH 内置的搜索 provider 变成可选。
