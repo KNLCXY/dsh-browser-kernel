@@ -26,12 +26,12 @@ browser_proxy  查看 / 切换 / 探测代理，实时生效，不用重启 DSH
 
 ## 下载
 
-不想 clone 就直接拿打包好的安装包：
+不想 clone 就直接去 Release 页拿安装包（`.tgz` 和 `SHA256SUMS.txt` 在同一页）：
 
-**[⬇ dsh-websift-0.9.11.tgz](https://github.com/KNLCXY/dsh-websift/releases/latest/download/dsh-websift-0.9.11.tgz)**（约 80 KB，含 `lib/`、`docs/`、`locale/`、图标）
+**[→ 最新 Release](https://github.com/KNLCXY/dsh-websift/releases/latest)** —— 下载其中的 `dsh-websift-<版本>.tgz`（约 80 KB，含 `lib/`、`docs/`、`locale/`、图标）
 
 ```bash
-dsh plugin --profile <你的 profile> add "file:<下载路径>/dsh-websift-0.9.11.tgz"
+dsh plugin --profile <你的 profile> add "file:<下载路径>/dsh-websift-<版本>.tgz"
 ```
 
 校验（同页附件 `SHA256SUMS.txt`）：
@@ -41,7 +41,7 @@ sha256sum -c SHA256SUMS.txt
 ```
 
 源码可以直接用 Release 页底部的 **Source code (zip / tar.gz)**，也可以 `git clone`。
-每个版本都会打 tag（当前 `v0.9.7`）。
+每个版本都会打 tag（当前 `v0.9.17`）。
 
 ---
 
@@ -99,7 +99,7 @@ dsh plugin --profile <你的 profile> add github:KNLCXY/dsh-websift
 dsh plugin --profile <你的 profile> add "file:/绝对路径/dsh-websift"
 
 # ③ 从打包好的 tgz 装（离线分发）
-dsh plugin --profile <你的 profile> add "file:/绝对路径/dsh-websift-0.9.8.tgz"
+dsh plugin --profile <你的 profile> add "file:/绝对路径/dsh-websift-<版本>.tgz"
 ```
 
 **装完必须重启 DSH** —— 插件的宿主半和 client 半都在进程启动时组装一次。

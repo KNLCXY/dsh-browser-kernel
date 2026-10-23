@@ -40,7 +40,12 @@ dsh plugin --profile <profile> add "file:/absolute/path/dsh-websift"
 
 Restart DSH afterwards — both the host and the client half are assembled at process start.
 
-**Then set your browser path** (the default points at the author's machine):
+**The browser path is auto-detected** — leave `chromePath` empty and the plugin probes `DSH_CHROME`,
+then installed Chrome / Edge / Brave / Chromium, then a bounded scan of `%LOCALAPPDATA%`, `%APPDATA%`,
+`Program Files`, `~/Desktop` and `DSH/resources` (depth 4–5; it also recognises 豆包 / quark / 360 / QQ /
+Sogou / UC / Liebao / Vivaldi / Opera, but prefers a real browser).
+
+Only if detection fails, point it at one explicitly:
 
 ```jsonc
 // ~/.dsh/storages/browser-kernel/settings.json

@@ -1,6 +1,6 @@
 # dsh-websift 使用说明书
 
-> 版本 **0.9.7** · 适用 DSH `0.2.1-rc.2` · 作者：本机自制
+> 版本 **0.9.17** · 适用 DSH `0.2.1-rc.2` · 作者：KNLCXY
 > 一句话：给 DSH 装一个**真浏览器**，并把它抓到的内容**压到只剩有用的部分**再交给模型。
 
 ---
@@ -45,7 +45,7 @@ DSH 自带的 `web_fetch` 有三个硬伤：
 ### 安装（本机）
 
 ```bash
-dsh plugin --profile desktop add "file:C:/Users/Administrator/Documents/deepseek-harness/default-workspace/plugins/dsh-websift"
+dsh plugin --profile desktop add "file:<本项目绝对路径>"
 ```
 
 装完**必须重启 DSH**——插件的宿主半和客户端半都是在进程启动时装配的。
@@ -54,7 +54,7 @@ dsh plugin --profile desktop add "file:C:/Users/Administrator/Documents/deepseek
 
 | 项 | 默认值 | 说明 |
 |---|---|---|
-| `chromePath` | `C:\Users\Administrator\Desktop\ocs-2.9.24-setup-win-x64\resources\bin\chrome\chrome\chrome.exe` | 别的机器要指向自己的 chrome.exe |
+| `chromePath` | 空（= 自动探测） | 一般不用填；探测不到时写自己的 chrome.exe 绝对路径 |
 | `proxyUrl` | `http://127.0.0.1:7897` | Clash 的混合端口，没有代理就留空 |
 
 两处都能在 **设置 → 浏览器内核** 里改，不用动文件。
@@ -619,6 +619,16 @@ browser({ url: "...", action: "screenshot" })
 | 0.9.3 | 修复 about:blank（复用同一标签） |
 | 0.9.4–0.9.6 | 修复设置页空白；安静模式（最小化不抢焦点） |
 | 0.9.7 | 搜前 query 清洗；标题重合排序 + 低质标题弃用；`strict` / `links_only`；返回固定成采用/弃用/建议 url。不引入模型摘要 |
+| 0.9.8 | 加 `--disable-blink-features=AutomationControlled`，修 headless 下 `navigator.webdriver=true` 导致 GitHub 编辑器整块不渲染 |
+| 0.9.9 | URL 去重修复：`^www.` 转义、非根尾斜杠、抓后按最终 URL 再合一次（重定向/跟踪参数/锚点三形态） |
+| 0.9.10 | 跟踪参数收窄（`from`/`source` 不再当跟踪参数）；`web_find` 合并挪到排序之前，名额可补足 |
+| 0.9.11 | 定位改为「一次调用读完，只回一段摘要，省 80–98% token」；浏览器降为底层实现 |
+| 0.9.12 | 内核路径自动探测（`DSH_CHROME` → 系统浏览器 → 应用内置），换机器不用手改 |
+| 0.9.13 | 面板「自动探测」按钮 + 候选内核路由；补齐调试端口输入；设置项覆盖审计 |
+| 0.9.14 | 可视化/安静窗口逻辑重写：可视化开则常驻不自动关，安静只决定置前与否 |
+| 0.9.15 | 探测重写：多根目录 + 有界 BFS + Chromium 特征校验（`icudtl.dat` / `*.pak`） |
+| 0.9.16 | Clash Verge 联动（可选）：端口不通时自动启动，面板加状态卡片与开关 |
+| 0.9.17 | `proxyMode: "never"` 时不再自动启动 Clash |
 
 ---
 
