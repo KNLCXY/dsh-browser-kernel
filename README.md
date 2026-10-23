@@ -20,7 +20,7 @@ browser_proxy  查看 / 切换 / 探测代理，实时生效，不用重启 DSH
 
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![dsh](https://img.shields.io/badge/DSH-0.2.x-black)](https://github.com/deepseek-ai)
-[![release](https://img.shields.io/github/v/release/KNLCXY/dsh-websift?label=release)](https://github.com/KNLCXY/dsh-websift/releases/latest)
+[![release](https://img.shields.io/github/v/release/KNLCXY/dsh-websift?label=release&include_prereleases)](https://github.com/KNLCXY/dsh-websift/releases)
 
 ---
 
@@ -28,7 +28,9 @@ browser_proxy  查看 / 切换 / 探测代理，实时生效，不用重启 DSH
 
 不想 clone 就直接去 Release 页拿安装包（`.tgz` 和 `SHA256SUMS.txt` 在同一页）：
 
-**[→ 最新 Release](https://github.com/KNLCXY/dsh-websift/releases/latest)** —— 下载其中的 `dsh-websift-<版本>.tgz`（约 80 KB，含 `lib/`、`docs/`、`locale/`、图标）
+**[→ 全部 Release](https://github.com/KNLCXY/dsh-websift/releases)** —— 每个版本都带 `.tgz` 和 `SHA256SUMS.txt`；下载其中的 `dsh-websift-<版本>.tgz`（约 90 KB，含 `lib/`、`docs/`、`locale/`、图标）
+
+> 版本口径：**0.x 一律是预发布**（Pre-release，不算 Latest）；**1.x 起才算正式版**。
 
 ```bash
 dsh plugin --profile <你的 profile> add "file:<下载路径>/dsh-websift-<版本>.tgz"
@@ -41,7 +43,7 @@ sha256sum -c SHA256SUMS.txt
 ```
 
 源码可以直接用 Release 页底部的 **Source code (zip / tar.gz)**，也可以 `git clone`。
-每个版本都会打 tag（当前 `v0.9.18`，标记为预发布；稳定版仍是 `v0.9.17`）。
+每个版本都会打 tag（当前 `v0.9.18`）。0.x 都是预发布，`/releases/latest` 在 1.0 之前不存在，别拿它当链接。
 
 ---
 
