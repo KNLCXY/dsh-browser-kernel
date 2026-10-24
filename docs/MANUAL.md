@@ -1,6 +1,6 @@
 # dsh-websift 使用说明书
 
-> 版本 **1.0.6** · 适用 DSH `0.2.1-rc.2` · 作者：KNLCXY
+> 版本 **1.0.8** · 适用 DSH `0.2.1-rc.2` · 作者：KNLCXY
 > 一句话：给 DSH 装一个**真浏览器**，并把它抓到的内容**压到只剩有用的部分**再交给模型。
 
 ---
@@ -350,7 +350,7 @@ Chrome（独立 profile）+ 页面
 
 | 能力 | 实现 |
 |---|---|
-| 启动 | `child_process.spawn(chrome.exe, args, {detached:true})` |
+| 启动 | `child_process.spawn(chrome.exe, args, {detached:true})`（**不要加 `windowsHide`**，见下） |
 | 参数 | `--headless=new`（可视模式不传）、`--no-sandbox`（必需）、`--user-data-dir=<temp>`、`--remote-debugging-port=9333`、`--disable-extensions`、`--mute-audio` |
 | 控制 | **CDP over WebSocket**，用 Node 24 内置的 `WebSocket`，**零依赖** |
 | 就绪判断 | 轮询 `document.readyState` + `body.innerText.length`，每 250ms |
@@ -361,20 +361,35 @@ Chrome（独立 profile）+ 页面
 
 为什么必须 `--no-sandbox`：内核在 Desktop 目录下，Chromium 沙箱读不到自己的可执行文件，报 `Sandbox cannot access executable (0x5)`。
 
+**为什么不能加 `windowsHide`**（1.0.7 修）：这个 spawn 选项本意只是「别弹控制台窗口」，但在 Windows 上会通过
+STARTUPINFO 传 `SW_HIDE`，把程序自己第一次 `ShowWindow` 覆盖掉 —— 浏览器窗口从头到尾都是隐藏的。
+后果有两个：① 「可视模式」形同虚设，用户看不到窗口（扫码登录那类操作没法做）；
+② **隐藏的 Chromium 窗口仍会在桌面上留下一整块纯白矩形**，尺寸正好等于 `--window-size`，就是用户反复报的
+「浏览器卡白框」。实测：同一内核、同样参数只差这个选项，`false` 时 `IsWindowVisible=True`、`true` 时 `False`；
+对纯净桌面采样，启动一个隐藏窗口后四个采样点全从桌面蓝变成 `RGB(255,255,255)`。
+msedge / chrome 都是 GUI 子系统程序，本来就不会创建控制台，去掉它对谁都无害。
+
 ### 5.3 代理决策
 
 ```
         命中 proxySites？
-        ├─ 是 → 代理（若代理端口活着）
+        ├─ 是 → 代理（若代理**真的能用**）
         └─ 否 → 直连 HEAD 探测
                   ├─ TTFB ≤ 1.2s → 直连
-                  ├─ TTFB > 1.2s → 代理（弱网/海外站）
-                  └─ 超时/失败   → 代理
+                  ├─ TTFB > 1.2s → 代理（若代理真的能用，否则直连）
+                  └─ 超时/失败   → 代理（若代理真的能用，否则直连）
         整页耗时 > 8s 且走的是直连 → 记住「该站走代理」，下次直接走
 ```
 
 - 探测结果缓存 10 分钟（`routeTtlMin`）
-- 代理存活用 `net.connect` 检查，300ms 超时，结果缓存 60 秒
+- **代理「能用」= 端口在监听 + 真的转发过一次**（1.0.7 起）：
+  - 端口存活用 `net.connect` 检查，300ms 超时，缓存 60 秒
+  - 转发能力用一次极小的 HTTP 请求实测（`GET http://…/generate_204`，两个探针都不通才算死），
+    单独一层缓存，和端口探活互不拖累
+  - 为什么必须分开：实测 Clash Verge 进程活着、7897 也在监听，但所有节点都挂了 ——
+    只看端口就判「代理在线」，浏览器被指到 `--proxy-server=死端口`，每个页面都是空白错误页
+- 导航落到 `chrome-error://chromewebdata/` 一律如实报错（`Page.navigate` 的 `errorText`），
+  并作废该域名路由 + 代理健康缓存；代理打不开时自动退回直连重试一次（`proxy: always` 除外）
 - **站点匹配**：`github.com` 同时命中 `gist.github.com`、`api.github.com`
 
 实测依据：GameBanana 直连 22–24 秒，走代理 8–11 秒；GitHub 直连不通。
@@ -386,6 +401,7 @@ urls / 搜索结果
    ↓ normalizeUrl：去 #锚点、去 utm_/spm/from/ref、去 www、参数排序
    ↓ 按规范化 URL 去重（同一篇以两种形态出现只抓一次）
    ↓ 缓存命中？→ 直接返回（ms:0）
+   ↓ 取「浏览器串行闸门」（只对真浏览器那一档生效，见下）
    ↓ readPage：
       ① ctx.web.fetch（DSH 自带，有 SSRF 防护、30s 超时、5MB 上限）
          失败重试 1 次（间隔 400ms）
@@ -393,8 +409,14 @@ urls / 搜索结果
       ③ 识别 JSON：最大的对象数组，每条取 ≤6 个短字段，最多 20 行
       ④ HTML：先删 script/style/nav/header/footer/aside/form，
               再删「链接占比 >60% 的 <li>」菜单项
-   ↓ 写入缓存（TTL 15 分钟，LRU 60 条）
+   ↓ 写入缓存（TTL 15 分钟，LRU 60 条，键 = 请求 URL）
 ```
+
+**浏览器串行闸门**（1.0.8 加）：整个插件只复用**一个**工作标签，所以任何驱动它的调用都必须排队。
+否则并发导航同一个标签会互相覆盖：轻则一个链接 `net::ERR_ABORTED`，重则 A 站读到 B 站的 DOM，
+而且**错误内容会被写进缓存**（键是请求 URL），之后 15 分钟一直张冠李戴地供应。
+只锁「驱动浏览器」这一件事 —— `stack=official` 的 HTTP 直连那一档照旧并发；
+`loginFlow` 自己开新标签（`/json/new`）也不进锁，否则一次登录会把队列堵几分钟。
 
 空壳判定：HTML 超过 8000 字符但抽出的正文不足 300 字——典型 SPA。
 
@@ -582,6 +604,11 @@ browser({ url: "...", action: "screenshot" })
 | 登录明明成功却报失败 | 判定条件不匹配 | 加 `wait_js`（最可靠）或直接点页面上的「✅ 我已登录」 |
 | 设置页空白 | 客户端代码抛错（历史上出现过 `sid is not defined`） | 看浏览器控制台；重启后仍空白就回滚版本 |
 | 可视窗口反复弹 | 旧版本每次新建标签 | 0.9.3+ 已修（复用同一标签 + 安静模式最小化） |
+| **桌面上出现一块白色矩形** | 内核窗口被 `windowsHide` 藏了，隐藏的 Chromium 窗口会在桌面留下纯白矩形 | 1.0.7 已修（去掉 `windowsHide`）。临时清理：`browser_proxy({action:"stop"})`，或对那块区域右键「刷新」 |
+| **每个页面都是「无法访问此网站」/ 整片白** | 代理端口在监听但节点全挂了 | 1.0.7 起会自动判「不可用」并退回直连；用 `browser_proxy({action:"status"})` 看代理那行，或换节点 / 更新订阅 |
+| 「可视模式」开了却看不到窗口 | 同第一条（`windowsHide`） | 1.0.7 已修；重启 DSH 后生效 |
+| **摘要里出现另一个页面的内容 / 标题对不上 URL** | 并发抓多页时共用一个工作标签，互相覆盖后又被写进缓存 | 1.0.8 已修（浏览器串行闸门）。注意缓存 TTL 15 分钟，重启 DSH 可立刻清掉旧的脏缓存 |
+| 多链接抓取时提示 `net::ERR_ABORTED` | 同上 | 同上 |
 | 装了不生效 | 没重启 | 宿主和客户端都必须重启 |
 
 ---

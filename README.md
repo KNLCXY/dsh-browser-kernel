@@ -397,6 +397,9 @@ browser_proxy({ action: "stop" })                       // 立刻关掉浏览器
 | `浏览器没起来（15s 内 CDP 端口无响应）` | `chromePath` 不存在，或端口被占。**设置 → 浏览器代理 → 自定义 → 内核路径** 改掉，或 `browser_proxy({action:"test"})` 看端口 |
 | `Sandbox cannot access executable` | 内核在受限目录，必须 `--no-sandbox`（已内置；如果你自己改过启动参数，别删它） |
 | `ERR_PROXY_CONNECTION_FAILED` | `proxySites` 里有这个域名，但代理端口没开（Clash 没启动）。要么开 Clash，要么把该域名从 `proxySites` 删掉，或 `proxy:"never"` 单次覆盖 |
+| 每个页面都是「无法访问此网站」/ 整片白 | 代理端口在监听，但节点全挂了（转发不通）。1.0.7 起会自动判「不可用」并退回直连；`browser_proxy({action:"status"})` 会把「端口」和「转发」分开报 |
+| **桌面上多出一块白色矩形** | 内核窗口被 `windowsHide` 藏了 —— 隐藏的 Chromium 窗口会在桌面留下一整块纯白矩形，尺寸等于 `--window-size`。1.0.7 已修（去掉该选项）。临时清理：`browser_proxy({action:"stop"})` |
+| 「可视模式」开了却看不到浏览器窗口 | 同上，1.0.7 已修；重启 DSH 后生效 |
 | 页面返回 200 但正文很短 | 页面是 SPA 且还在渲染：`wait_ms: 2500` 或用 `action:"eval"` 读 DOM |
 | `web_digest` 说「一页都没命中」 | 查询词和正文对不上。看它返回的候选链接，用 `urls` 直接深挖，或换关键词 |
 | 设置面板空白 | client 半在进程启动时组装；改了 `lib/client.js` **必须重启 DSH** |
@@ -407,12 +410,21 @@ browser_proxy({ action: "stop" })                       // 立刻关掉浏览器
 ## 开发
 
 ```bash
-# 纯逻辑自测（不开 DSH）：把 lib 里的 @deepseek-ai/dsh-tools 指向 asar 里的真实实现
-ELECTRON_RUN_AS_NODE=1 "<DSH 安装目录>/DeepSeek Harness.exe" test/test-offline.mjs
+# 断言测试（合起来就是 npm test）：rank / failed / route / deadproxy / window / serial
+npm test
 
-# 其余单测（Node 22+，不需要 DSH）
-node --test test/
+# 单个跑
+npm run test:deadproxy    # 假代理「只监听不转发」必须判不可用
+npm run test:window       # 白框回归锁（DSH_WEBSIFT_LIVE=1 时额外做真机窗口可见性校验）
+npm run test:serial       # 并发抓多页不许串内容（可传一个 lib 目录做修复前后对照）
+
+# 手动诊断（只打印结果，没有断言）
+npm run diag:find         # 真浏览器搜一次
+npm run diag:offline      # 内核 / 代理 / 截图全链路（跑完自动还原设置）
+npm run diag:cmp -- <lib 目录> <标签>   # 用假代理对照某个版本的路由决策
 ```
+
+本机没有 `node` 时，用内核自带的 Node 跑：`ELECTRON_RUN_AS_NODE=1 "<DSH>/DeepSeek Harness.exe" test/test-rank.mjs`。
 
 基准脚本在 `bench/`：`bench-final.mjs`（分档预算）、`bench-regimes.mjs`（档位阈值）、`bench-digest.mjs`（摘要质量）、`bench-route.mjs`（代理路由）、`ab-gate.mjs`（相关性闸门）、`reg-fact.mjs`（数值豁免回归）。
 

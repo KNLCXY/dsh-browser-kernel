@@ -1,3 +1,5 @@
+// ⚠️ 手动诊断脚本（没有断言）。注入 web.fetch 桩的那几段同样只在 `settings.stack === 'official'`
+// 时才会被插件使用；`stack: "plugin"`（实盘默认）下它们走的是真浏览器那一档。
 import { loadPlugin } from './_setup.mjs'
 
 // 插件源码里的 '@deepseek-ai/dsh-tools' 会被指到 DSH 里的真实实现；

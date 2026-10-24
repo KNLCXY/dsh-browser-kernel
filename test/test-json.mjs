@@ -1,3 +1,7 @@
+// ⚠️ 手动诊断脚本（没有断言）。它注入 web.fetch 桩，想测的是「HTTP 直连 + JSON 压缩」那一档，
+// 但插件只在 `settings.stack === 'official'` 时才走官方 fetch：实盘设置是 `stack: "plugin"`
+// 时这条链路会被整段跳过，配合 allow_browser:false 只会得到「一页正文都没取到」。
+// 要真的测 JSON 压缩，先把设置里的 stack 改成 official。
 import { loadPlugin } from './_setup.mjs'
 
 // 插件源码里的 '@deepseek-ai/dsh-tools' 会被指到 DSH 里的真实实现；

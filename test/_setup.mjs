@@ -27,12 +27,13 @@ export function resolveTools () {
   return guesses.find((p) => p && existsSync(p)) || null
 }
 
-/** 载入插件模块（先复制到临时目录并改写 import，避免模块缓存与真实安装冲突）。 */
-export async function loadPlugin () {
+/** 载入插件模块（先复制到临时目录并改写 import，避免模块缓存与真实安装冲突）。
+ *  libDirOverride 可指向另一份 lib，用来跑「修复前 vs 修复后」的对照。 */
+export async function loadPlugin (libDirOverride) {
   const toolsPath = resolveTools()
   // 整个 lib/ 一起复制：index.js 里还有 `./rank.js` 这样的相对依赖
   const dir = mkdtempSync(join(tmpdir(), 'bk-test-'))
-  const libDir = join(ROOT, 'lib')
+  const libDir = libDirOverride || join(ROOT, 'lib')
   for (const f of readdirSync(libDir)) {
     if (!f.endsWith('.js')) continue
     const code = readFileSync(join(libDir, f), 'utf8').replace(
