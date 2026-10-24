@@ -1,6 +1,6 @@
 # dsh-websift 使用说明书
 
-> 版本 **0.9.24** · 适用 DSH `0.2.1-rc.2` · 作者：KNLCXY
+> 版本 **0.9.25** · 适用 DSH `0.2.1-rc.2` · 作者：KNLCXY
 > 一句话：给 DSH 装一个**真浏览器**，并把它抓到的内容**压到只剩有用的部分**再交给模型。
 
 ---
@@ -297,6 +297,8 @@ browser({
 | `factExempt` | 开 | 事实句豁免：带单位的数字/版本号不会被门槛删掉 |
 | `stack` | `plugin` | 搜索+抓取来源：`plugin` = 全走真浏览器（默认，完全不碰 `ctx.web.*`）；`official` = `ctx.web.search` + `ctx.web.fetch`，失败才回退浏览器 |
 | `cacheTtlMin` | 15 | 页面缓存有效期 |
+| `cdpTimeoutMs` | 30000 | 单条 CDP 命令超时（3000–120000）。内核卡住时不会把整轮拖死 |
+| `autoMinimizeOnClash` | 开 | 「启动 Clash Verge」成功后自动最小化浏览器窗口 |
 | `cacheMax` | 60 | 缓存条数 |
 | `routeTtlMin` | 10 | 路由判断缓存 |
 | `probeTimeoutMs` | 2500 | 直连探测超时 |

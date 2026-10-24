@@ -344,6 +344,8 @@ browser_proxy({ action: "stop" })                       // 立刻关掉浏览器
 | `factExempt` | `true` | 带单位的数字豁免相关性闸门 |
 | `stack` | `plugin` | 两套方案二选一，不混搭：`plugin` = 搜索和抓取都走真浏览器，完全不碰 `ctx.web.*`；`official` = 搜索走 `ctx.web.search`、抓取走 `ctx.web.fetch`（失败才回退浏览器） |
 | `cacheTtlMin` / `cacheMax` | `15` / `60` | 页面缓存分钟数 / 条数 |
+| `cdpTimeoutMs` | `30000` | 单条 CDP 命令超时（3000–120000）；内核卡住时最多等这么久就报错，不会挂死整轮 |
+| `autoMinimizeOnClash` | `true` | 点「启动 Clash Verge」成功后自动最小化浏览器窗口 |
 | `pageWaitMs` / `waitMs` | `45000` / `600` | 页面加载上限 / 加载后再等 |
 | `routeTtlMin` | `10` | 代理路由结果缓存分钟数 |
 | `loginPollMs` / `loginStreak` / `loginTimeoutS` | `1500` / `3` / `180` | 登录轮询间隔 / 连续确认次数 / 超时 |

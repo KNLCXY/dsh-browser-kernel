@@ -2,6 +2,28 @@
 
 本项目从「工作区脚本」长成「profile 级插件」，版本号按功能块递进。较早的条目按系列合并记录，细节以 `git log` 为准。
 
+## 0.9.25
+
+- **修整轮挂死的根因**：33 处 CDP 调用都没有超时，内核一卡（实测 Edge 截图）工具调用就永不返回，
+  只能重启 DSH。现在 `connect().send()` 统一 30s 超时（`cdpTimeoutMs` 可调），CDP 的 HTTP 端点也加了 `AbortSignal`
+- 面板新增「**最小化窗口**」按钮（`POST /_browser-kernel/window`）；headless 时会明说「没有窗口可最小化」
+- 新增开关 `autoMinimizeOnClash`（默认开）：点「启动 Clash Verge」成功后自动最小化浏览器窗口
+- 高级设置补齐 `cdpTimeoutMs` 输入框（此前只能改配置文件）
+- 实测：Edge 内核截图正常（1416×808，3.7s）；四条路由与设置读写均符合预期
+
+## 0.9.24
+
+- `browser` 工具每次调用都重新读设置：此前用的是 `apply()` 时的快照，改 `visible` 等参数只能重启 DSH 才生效
+- Chrome 启动参数加 `--disable-features=HttpsUpgrades`（后经验证对 Chrome 137 无效，0.9.25 起保留但不依赖它）
+
+## 0.9.23
+
+- 官方 `fetch` / `search` 加超时（20s）：没有超时的话，站点不响应会把整个工具调用拖死
+
+## 0.9.22
+
+- 修 `proxyMode: "never"` 时仍会拉起 Clash 的问题（见 0.9.17 记录）
+
 ## 0.9.21
 
 给「使用官方 API」开关加了 ⓘ 提示（悬停显示）：说明打开后搜索/抓取分别走哪个接口、
