@@ -25,6 +25,8 @@ browser_proxy  查看 / 切换 / 探测代理，实时生效，不用重启 DSH
 
 ---
 
+![dsh-websift：一次调用读完多页、按相关性筛掉不相关的，只回一段带账本的摘要](docs/images/hero.png)
+
 ## 下载
 
 **已在 npm 上**（`dsh-websift`）：直接装就行，不用 clone、不用找包——
@@ -221,6 +223,8 @@ web_digest({ query: "deepseek harness 插件", max_pages: 2, budget_chars: 1200 
 返回固定抬头：**采用 / 弃用 / 建议深挖**，按「标题与查询词的字面重合」重排，首页、纯域名、符号堆砌这类低质标题会被丢掉。标 ★ 的前 3 条直接丢给 `web_digest({ urls })`，不要换个说法再搜一轮。
 
 ### `web_digest`
+
+![一次调用的账本：抓回来的正文 vs 返回的摘要](docs/images/ledger.png)
 
 把「查资料」压成一次调用：搜索（或给定链接）→ 抓正文 → 相关性筛选 → 抽取并合并关键句 → 返回紧凑摘要。
 

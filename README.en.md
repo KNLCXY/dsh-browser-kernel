@@ -15,6 +15,8 @@ Why "browser + digest" instead of just a browser: accessibility trees, sidebar t
 
 > The project is developed against the Chinese-speaking DSH community; the detailed manual ([README.md](README.md), [docs/MANUAL.md](docs/MANUAL.md)) is in Chinese. This file is the English overview.
 
+![dsh-websift: one call reads several pages, gates them by relevance and returns a single digest](docs/images/hero.png)
+
 ## Why
 
 DSH's built-in `web_fetch` is an HTTP fetcher: no JS engine, no cookie jar, and it ignores proxy environment variables. That fails on exactly the pages an agent meets most often:
@@ -90,6 +92,8 @@ or **Settings → 浏览器代理 → 自定义 → 内核路径**. Any Chromium
 Returns a fixed three-part answer — **adopted / dropped / dig deeper** — with titles and real URLs, and drops junk titles (homepages, bare domains, symbol soup).
 
 ### `web_digest`
+
+![The ledger of one call: raw text vs returned digest](docs/images/ledger.png)
 
 | Param | Default | Notes |
 |---|---|---|
