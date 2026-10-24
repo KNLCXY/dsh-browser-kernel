@@ -124,7 +124,7 @@ dsh plugin --profile <你的 profile> add "file:/绝对路径/dsh-websift-<版�
 找不到才需要你手动指一个：
 
 ```jsonc
-// ~/.dsh/storages/browser-kernel/settings.json
+// ~/.dsh/storages/websift/settings.json
 { "chromePath": "C:/Program Files/Google/Chrome/Application/chrome.exe" }
 ```
 
@@ -173,7 +173,7 @@ web_digest({ query: "deepseek harness 插件", max_pages: 2, budget_chars: 1200 
 | `max_chars` | number | `4000` | 返回文本上限 |
 | `proxy` | string | 跟随设置 | 单次覆盖：`auto` / `always` / `never` |
 | `full_page` | boolean | `true` | 截图是否整页 |
-| `out` | string | `~/.dsh/storages/browser-kernel/shots/` | 截图保存路径 |
+| `out` | string | `~/.dsh/storages/websift/shots/` | 截图保存路径 |
 | `actions` | string | — | **批量动作**（JSON 数组，最多 12 个），在取正文前一次性做完，只返回最终页面 |
 | `wait_until` | string | — | `action=login` 时，出现这个 CSS 选择器就算登录成功 |
 | `timeout_s` | number | `180` | `action=login` 的等待秒数（最少 20，最多 600） |
@@ -257,7 +257,7 @@ browser_proxy({ action: "set", mode: "always" })        // 切模式，立即生
 browser_proxy({ action: "stop" })                       // 立刻关掉浏览器，释放 ~700MB
 ```
 
-改动写进 `~/.dsh/storages/browser-kernel/settings.json`，**优先级高于插件配置**，不用重启。
+改动写进 `~/.dsh/storages/websift/settings.json`，**优先级高于插件配置**，不用重启。
 
 ---
 
@@ -350,7 +350,7 @@ browser_proxy({ action: "stop" })                       // 立刻关掉浏览器
 | `routeTtlMin` | `10` | 代理路由结果缓存分钟数 |
 | `loginPollMs` / `loginStreak` / `loginTimeoutS` | `1500` / `3` / `180` | 登录轮询间隔 / 连续确认次数 / 超时 |
 | `probeTimeoutMs` / `slowVisitMs` | `2500` / `8000` | 直连探测阈值 / 慢站判定 |
-| `profileDir` / `outputDir` | `%TEMP%/dsh-websift-profile`、`~/.dsh/storages/browser-kernel` | 浏览器 profile / 截图与设置 |
+| `profileDir` / `outputDir` | `%TEMP%/dsh-websift-profile`、`~/.dsh/storages/websift` | 浏览器 profile / 截图与设置 |
 
 > 每条配置都是「改完即生效」的（下次调用读新值），只有 `chromePath` / `port` 会触发内核重启。
 

@@ -1,6 +1,6 @@
 {
   "name": "dsh-websift",
-  "version": "0.9.25",
+  "version": "0.9.26",
   "description": "Token-efficient web reading for DeepSeek Harness, powered by a real Chrome over CDP. One call fetches several pages, gates them by relevance and returns a single digest (80-98% fewer context tokens). Real search URLs, login flow, screenshots, auto proxy.",
   "type": "module",
   "main": "lib/index.js",

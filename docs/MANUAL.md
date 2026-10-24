@@ -1,6 +1,6 @@
 # dsh-websift 使用说明书
 
-> 版本 **0.9.25** · 适用 DSH `0.2.1-rc.2` · 作者：KNLCXY
+> 版本 **0.9.26** · 适用 DSH `0.2.1-rc.2` · 作者：KNLCXY
 > 一句话：给 DSH 装一个**真浏览器**，并把它抓到的内容**压到只剩有用的部分**再交给模型。
 
 ---
@@ -496,9 +496,9 @@ ensureChrome(visible=true)
 |---|---|
 | 设置页 | 客户端模块 `ctx.slots.register({ name: "settings.section" })` |
 | 输入框开关 | `ctx.slots.register({ name: "conversation.input.dock" })` |
-| 读写 | `webServer.register({ kind: "exact", path: "/_browser-kernel/settings" })` |
+| 读写 | `webServer.register({ kind: "exact", path: "/_websift/settings" })` |
 | 校验 | `sanitizePatch`：白名单字段 + 范围检查，非法返回 400 |
-| 持久化 | `~/.dsh/storages/browser-kernel/settings.json` |
+| 持久化 | `~/.dsh/storages/websift/settings.json` |
 
 ---
 

@@ -9,7 +9,7 @@
                        │   ├─ browser / web_find / web_digest / browser_proxy             │
                        │   ├─ 代理路由（routeCache / probe / proxyAlive）                  │
                        │   ├─ 摘要管线（抓取 → 闸门 → 抽取 → 打包）                        │
-                       │   └─ HTTP 路由 /_browser-kernel/settings                          │
+                       │   └─ HTTP 路由 /_websift/settings                          │
                        │                    │                          ▲                  │
                        └────────────────────┼──────────────────────────┼──────────────────┘
                                             │ CDP (WebSocket)          │ fetch
@@ -29,11 +29,11 @@ export const name = 'dsh-websift'
 export const inject = ['tools', 'webServer']
 
 export function apply (ctx, config) {
-  // 1. settings = DEFAULTS ← 插件配置 ← ~/.dsh/storages/browser-kernel/settings.json
+  // 1. settings = DEFAULTS ← 插件配置 ← ~/.dsh/storages/websift/settings.json
   // 2. 注册四个工具：ctx.tools.register(defineTool({...}))
   // 3. 注册设置路由（必须在 ctx.effect 里，且工厂要返回 disposer）
   ctx.effect(() => ctx.get('webServer').register({
-    kind: 'exact', path: '/_browser-kernel/settings', handler,
+    kind: 'exact', path: '/_websift/settings', handler,
   }))
 }
 ```
@@ -122,7 +122,7 @@ window.__ModuleLoader__.load({
 })
 ```
 
-- **设置面板**：`GET/POST /_browser-kernel/settings`，宿主侧校验（代理地址协议、30–21600 秒、`.exe`），非法直接 400
+- **设置面板**：`GET/POST /_websift/settings`，宿主侧校验（代理地址协议、30–21600 秒、`.exe`），非法直接 400
 - **输入框三档开关**：关 / 按需 / 强制。**关**是唯一有硬约束的一档 —— 宿主直接拦下三个工具，不启动内核、不联网
 
 ## 配置优先级
@@ -130,7 +130,7 @@ window.__ModuleLoader__.load({
 ```
 DEFAULTS（lib/index.js）
    ↑ 被 cordis.patch.yml 的 config 覆盖（出厂默认）
-   ↑ 被 ~/.dsh/storages/browser-kernel/settings.json 覆盖（运行时，工具/面板写入）
+   ↑ 被 ~/.dsh/storages/websift/settings.json 覆盖（运行时，工具/面板写入）
 ```
 
 所以 `cordis.patch.yml` 里的值只是出厂值；真正生效的是 settings.json。两者都在会话之间保留。

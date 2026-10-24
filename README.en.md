@@ -48,7 +48,7 @@ Sogou / UC / Liebao / Vivaldi / Opera, but prefers a real browser).
 Only if detection fails, point it at one explicitly:
 
 ```jsonc
-// ~/.dsh/storages/browser-kernel/settings.json
+// ~/.dsh/storages/websift/settings.json
 { "chromePath": "C:/Program Files/Google/Chrome/Application/chrome.exe" }
 ```
 
@@ -67,7 +67,7 @@ or **Settings → 浏览器代理 → 自定义 → 内核路径**. Any Chromium
 | `max_chars` | `4000` | text cap |
 | `proxy` | from settings | per-call override: `auto` / `always` / `never` |
 | `full_page` | `true` | full-page screenshot |
-| `out` | `~/.dsh/storages/browser-kernel/shots/` | screenshot path |
+| `out` | `~/.dsh/storages/websift/shots/` | screenshot path |
 | `actions` | — | JSON array (≤12) of `{click}`, `{wait}`, `{scroll}`, `{type:{selector,text}}` executed before extracting — batch work, one summary |
 | `wait_until` | — | for `login`: selector that means success |
 | `timeout_s` | `180` | `login` timeout (20–600) |
@@ -112,7 +112,7 @@ It is **extractive, not abstractive**: it picks original sentences, so it cannot
 
 ### `browser_proxy`
 
-`status` / `set` / `test` / `stop`, with `mode: auto|always|never`. Writes to `~/.dsh/storages/browser-kernel/settings.json`, which takes precedence over the plugin config and applies immediately.
+`status` / `set` / `test` / `stop`, with `mode: auto|always|never`. Writes to `~/.dsh/storages/websift/settings.json`, which takes precedence over the plugin config and applies immediately.
 
 ## Proxy modes
 

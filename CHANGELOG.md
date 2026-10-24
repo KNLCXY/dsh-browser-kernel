@@ -2,11 +2,24 @@
 
 本项目从「工作区脚本」长成「profile 级插件」，版本号按功能块递进。较早的条目按系列合并记录，细节以 `git log` 为准。
 
+## 0.9.26
+
+**统一改名**（发布前最后一次，之后不再动）：
+
+- 路由 `/_browser-kernel/*` → `/_websift/*`
+- 存储目录 `~/.dsh/storages/browser-kernel` → `~/.dsh/storages/websift`；
+  首次运行会把旧设置**复制**过去，**旧目录保留作备份**，配置不会丢
+- 输入框 dock id `browser-kernel-toggle` → `websift-toggle`
+- `dsh-plugin.json` 的 id `dsh-websift.local` → `dsh-websift`
+- 文档/README/ARCHITECTURE 里的路径同步（全仓 33 处，已确认 0 残留）
+
+> 注意：改路由与 dock id 后**必须重启 DSH**，否则旧 client 半会去请求已经不存在的旧路由。
+
 ## 0.9.25
 
 - **修整轮挂死的根因**：33 处 CDP 调用都没有超时，内核一卡（实测 Edge 截图）工具调用就永不返回，
   只能重启 DSH。现在 `connect().send()` 统一 30s 超时（`cdpTimeoutMs` 可调），CDP 的 HTTP 端点也加了 `AbortSignal`
-- 面板新增「**最小化窗口**」按钮（`POST /_browser-kernel/window`）；headless 时会明说「没有窗口可最小化」
+- 面板新增「**最小化窗口**」按钮（`POST /_websift/window`）；headless 时会明说「没有窗口可最小化」
 - 新增开关 `autoMinimizeOnClash`（默认开）：点「启动 Clash Verge」成功后自动最小化浏览器窗口
 - 高级设置补齐 `cdpTimeoutMs` 输入框（此前只能改配置文件）
 - 实测：Edge 内核截图正常（1416×808，3.7s）；四条路由与设置读写均符合预期
@@ -42,7 +55,7 @@
 - `plugin`（默认）：搜索用真浏览器，抓正文也用浏览器，**完全不碰 `ctx.web.*`**
   —— 不再有 provider 歧义报错，也不再出现「搜索用插件、抓取用官方」的半吊子状态
 - `official`：搜索走 `ctx.web.search`，抓取走 `ctx.web.fetch`，抓取失败才回退浏览器
-- 设置面板改成两个按钮（插件自带 / 官方 API）；`GET/POST /_browser-kernel/settings` 用 `stack` 字段
+- 设置面板改成两个按钮（插件自带 / 官方 API）；`GET/POST /_websift/settings` 用 `stack` 字段
 - 兼容 0.9.18 的 `builtinSearch` 布尔值：只有没写 `stack` 时才按旧值映射
 - 浏览器抓取补上 JSON 识别：Chrome 把 JSON 原样渲染成文本时同样压成紧凑行，保住「JSON 直读」的收益
 - 实测：plugin 模式 `web.search` 0 次 / `web.fetch` 0 次；official 模式各 1 次
@@ -54,7 +67,7 @@
 - 关（默认）：`web_digest` 直接走浏览器搜索，不再调用 `ctx.web.search()` —— 结果头里那句
   `multiple usable web providers are registered …` 不会再出现
 - 开：先试 `ctx.web.search()`，失败再回退浏览器，并把真实原因如实写进备注
-- 设置面板「高级设置」多一个开关；`GET/POST /_browser-kernel/settings` 都支持该字段
+- 设置面板「高级设置」多一个开关；`GET/POST /_websift/settings` 都支持该字段
 - 实测：关 → provider 调用 0 次、输出无报错；开 → 调用 1 次、报错如实出现在备注
 
 ## 0.9.17
@@ -98,7 +111,7 @@
 
 - 设置面板加「**自动探测**」：点一下列出本机所有可用内核（Chrome / Edge / Brave /
   应用自带 / `DSH_CHROME`），点一个就填进路径；另有「留空 / 用自动」一键回到自动探测
-- 新增宿主路由 `GET /_browser-kernel/chrome-candidates`（只回真正存在的路径）
+- 新增宿主路由 `GET /_websift/chrome-candidates`（只回真正存在的路径）
 - 面板补齐「调试端口」输入（1024–65535，改完会重启内核）
 - 设置项覆盖审计：`visible` / `quiet` / `factExempt` / `showDock` / `proxyMode` / 预算与缓存
   等全部可在面板改；只有 `profileDir` / `outputDir` 故意不暴露（前者是浏览器 profile，
