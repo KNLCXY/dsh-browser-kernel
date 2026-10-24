@@ -21,12 +21,19 @@ browser_proxy  查看 / 切换 / 探测代理，实时生效，不用重启 DSH
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![dsh](https://img.shields.io/badge/DSH-0.2.x-black)](https://github.com/deepseek-ai)
 [![release](https://img.shields.io/github/v/release/KNLCXY/dsh-websift?label=release)](https://github.com/KNLCXY/dsh-websift/releases/latest)
+[![npm](https://img.shields.io/npm/v/dsh-websift?label=npm)](https://www.npmjs.com/package/dsh-websift)
 
 ---
 
 ## 下载
 
-不想 clone 就直接去 Release 页拿安装包（`.tgz` 和 `SHA256SUMS.txt` 在同一页）：
+**已在 npm 上**（`dsh-websift`）：直接装就行，不用 clone、不用找包——
+
+```bash
+dsh plugin --profile <你的 profile> add dsh-websift
+```
+
+也可以去 Release 页拿安装包（`.tgz` 和 `SHA256SUMS.txt` 在同一页）：
 
 **[→ 最新正式版](https://github.com/KNLCXY/dsh-websift/releases/latest)**（也可以看 [全部 Release](https://github.com/KNLCXY/dsh-websift/releases)，含历史预发布）—— 下载其中的 `dsh-websift-<版本>.tgz`（约 100 KB，含 `lib/`、`docs/`、`locale/`、图标）
 
@@ -94,13 +101,16 @@ DSH 自带的 `web_fetch` 是一个 **HTTP 抓取器**：没有 JS 引擎、不�
 需要 DSH（桌面版或 CLI 均可）和一份本机 Chrome/Chromium。
 
 ```bash
-# ① 从 git 装（推荐，跟随仓库最新）
+# ① 从 npm 装（最省事，版本固定）
+dsh plugin --profile <你的 profile> add dsh-websift
+
+# ② 从 git 装（跟随仓库最新）
 dsh plugin --profile <你的 profile> add github:KNLCXY/dsh-websift
 
-# ② 从目录装（要改代码时）
+# ③ 从目录装（要改代码时）
 dsh plugin --profile <你的 profile> add "file:/绝对路径/dsh-websift"
 
-# ③ 从打包好的 tgz 装（离线分发）
+# ④ 从打包好的 tgz 装（离线分发）
 dsh plugin --profile <你的 profile> add "file:/绝对路径/dsh-websift-<版本>.tgz"
 ```
 

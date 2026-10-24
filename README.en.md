@@ -33,8 +33,11 @@ Design rule: **one call, one result.** Returning a summary after every step mean
 ## Install
 
 ```bash
+# from npm (easiest, pinned version)
+dsh plugin --profile <profile> add dsh-websift
+# or from git (tracks the repo)
 dsh plugin --profile <profile> add github:KNLCXY/dsh-websift
-# or, from a checkout / a tarball:
+# or from a checkout / a tarball:
 dsh plugin --profile <profile> add "file:/absolute/path/dsh-websift"
 ```
 
