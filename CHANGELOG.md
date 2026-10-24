@@ -2,6 +2,22 @@
 
 本项目从「工作区脚本」长成「profile 级插件」，版本号按功能块递进。较早的条目按系列合并记录，细节以 `git log` 为准。
 
+## 1.0.0
+
+**首个正式版**（GitHub 会把它标成 Latest；0.9.x 全部保持预发布）。
+
+从 0.9.0 到 1.0.0 累计的稳定能力：
+
+- 四个工具：`browser`（text / html / eval / screenshot / login）、`web_find`、`web_digest`、`browser_proxy`
+- 一次调用多页抓取 + 相关性闸门 + 压缩摘要（实测省 82–98% 上下文）
+- 内核自动探测（Chrome / Edge / Brave / Chromium / 应用内置），换机器不用手改
+- 三档代理（auto / always / never）+ Clash Verge 可选联动（启动后自动最小化窗口）
+- 两套闭环可选：`plugin`（全走浏览器，默认）/ `official`（官方 API 搜索+抓取）
+- 所有 CDP 调用带超时，内核卡住不会再拖死整轮（1.0 前最后一次修的，也是最重要的一个）
+- 完整改名：路由 `/_websift/*`、存储 `storages/websift`、dock id、清单 id，旧配置自动复制迁移
+
+> 1.0.0 起行为冻结：只修 bug、不再改接口；要动接口就走 2.0。
+
 ## 0.9.26
 
 **统一改名**（发布前最后一次，之后不再动）：
